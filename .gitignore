@@ -1,0 +1,33 @@
+# Claude Code internal tooling
+.claude/
+
+# Build output
+bin/
+obj/
+
+# SQLite databases (except migrations)
+*.db
+*.db-shm
+*.db-wal
+
+# .NET user files
+*.user
+*.suo
+.vs/
+
+# Rider / JetBrains
+.idea/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Environment / secrets
+appsettings.local.json
+*.env
+
+# NuGet
+.nuget/
+packages/

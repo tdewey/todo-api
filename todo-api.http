@@ -1,0 +1,88 @@
+@todo_api_HostAddress = http://localhost:5243
+
+### Create a todo
+POST {{todo_api_HostAddress}}/api/todos
+Content-Type: application/json
+
+{
+  "title": "Buy groceries",
+  "description": "Milk, eggs, bread"
+}
+
+###
+
+### Create a second todo
+POST {{todo_api_HostAddress}}/api/todos
+Content-Type: application/json
+
+{
+  "title": "Write unit tests"
+}
+
+###
+
+### Get all todos
+GET {{todo_api_HostAddress}}/api/todos
+Accept: application/json
+
+###
+
+### Get only completed todos
+GET {{todo_api_HostAddress}}/api/todos?isCompleted=true
+Accept: application/json
+
+###
+
+### Get only incomplete todos
+GET {{todo_api_HostAddress}}/api/todos?isCompleted=false
+Accept: application/json
+
+###
+
+### Get a todo by id
+GET {{todo_api_HostAddress}}/api/todos/1
+Accept: application/json
+
+###
+
+### Update a todo
+PUT {{todo_api_HostAddress}}/api/todos/1
+Content-Type: application/json
+
+{
+  "title": "Buy groceries (updated)",
+  "description": "Milk, eggs, bread, and coffee",
+  "isCompleted": false
+}
+
+###
+
+### Mark a todo as complete
+PATCH {{todo_api_HostAddress}}/api/todos/1/complete
+
+###
+
+### Delete a todo (soft delete)
+DELETE {{todo_api_HostAddress}}/api/todos/2
+
+###
+
+### Validation error — missing required title
+POST {{todo_api_HostAddress}}/api/todos
+Content-Type: application/json
+
+{
+  "description": "This should fail — title is required"
+}
+
+###
+
+### Validation error — title exceeds max length
+POST {{todo_api_HostAddress}}/api/todos
+Content-Type: application/json
+
+{
+  "title": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+}
+
+###
