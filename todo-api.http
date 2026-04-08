@@ -57,11 +57,6 @@ Content-Type: application/json
 
 ###
 
-### Mark a todo as complete
-PATCH {{todo_api_HostAddress}}/api/todos/1/complete
-
-###
-
 ### Delete a todo (soft delete)
 DELETE {{todo_api_HostAddress}}/api/todos/2
 
