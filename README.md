@@ -39,8 +39,10 @@ dotnet tool install --global dotnet-ef --version 9.0.10
 git clone <repo-url>
 cd todo-api
 
-# 2. Run the API (migrations are applied automatically on first start)
-dotnet run --project todo-api --launch-profile http
+# 2. Run the API
+# * running in the 'seed' profile seeds the database with
+#   in-memory data that goes away on shutdown
+dotnet run --project todo-api --launch-profile http|https|seed
 ```
 
 The API starts at `http://localhost:5243`. Swagger UI is available at:
@@ -57,11 +59,6 @@ No manual database setup is required. The SQLite file (`todos.db`) is created an
 
 ```bash
 dotnet test
-```
-
-Expected output:
-```
-Passed! - Failed: 0, Passed: 15, Skipped: 0, Total: 15
 ```
 
 To run a specific test class:
@@ -83,7 +80,6 @@ All endpoints are also available via the included `todo-api.http` file (compatib
 | `GET` | `/api/todos/{id}` | — | `200 OK` — single todo, or `404` |
 | `POST` | `/api/todos` | `CreateTodoDto` | `201 Created` with `Location` header |
 | `PUT` | `/api/todos/{id}` | `UpdateTodoDto` | `200 OK` — updated todo, or `404` |
-| `PATCH` | `/api/todos/{id}/complete` | — | `200 OK` — completed todo, or `404` |
 | `DELETE` | `/api/todos/{id}` | — | `204 No Content`, or `404` |
 
 ### Request Shapes
@@ -92,7 +88,6 @@ All endpoints are also available via the included `todo-api.http` file (compatib
 ```json
 {
   "title": "Buy groceries",      // required, max 200 chars
-  "description": "Milk, eggs"    // optional, max 1000 chars
 }
 ```
 
@@ -100,7 +95,6 @@ All endpoints are also available via the included `todo-api.http` file (compatib
 ```json
 {
   "title": "Buy groceries",      // required, max 200 chars
-  "description": "Milk, eggs",   // optional, max 1000 chars
   "isCompleted": false           // required bool
 }
 ```
@@ -110,7 +104,6 @@ All endpoints are also available via the included `todo-api.http` file (compatib
 {
   "id": 1,
   "title": "Buy groceries",
-  "description": "Milk, eggs",
   "isCompleted": false,
   "createdAt": "2026-04-07T18:00:00+00:00",
   "updatedAt": "2026-04-07T18:00:00+00:00"
@@ -136,16 +129,16 @@ All errors follow [RFC 7807 Problem Details](https://www.rfc-editor.org/rfc/rfc7
 
 ## Design Decisions
 
-**Repository + Service pattern**
+#### Repository + Service pattern
 Controllers, services, and repositories are separate layers. Controllers handle HTTP and nothing else — they call a service method and return the result. Services own the business rules. Repositories talk to the database. This separation makes each layer testable in isolation. Service tests use EF Core InMemory, controller tests go through `WebApplicationFactory` against a real SQLite connection.
 
-**Soft deletes**
+#### Soft deletes
 `DELETE /api/todos/{id}` sets a `DeletedAt` timestamp rather than removing the row. A global EF Core query filter (`t => t.DeletedAt == null`) automatically excludes soft-deleted items from all queries. This preserves history without any additional application logic. I went with this partly because it's a sensible default for any API where an audit trail might matter.
 
-**SQLite with EF Core migrations**
+#### SQLite with EF Core migrations
 SQLite was chosen to make the project low/no-configuration. Migrations are applied automatically on startup (`db.Database.Migrate()`), devs can clone and run immediately. The migration to SQL Server would require only a connection string change.
 
-**DataAnnotations over FluentValidation**
+#### DataAnnotations over FluentValidation
 DataAnnotations on the DTOs cover required fields and max lengths. For an MVP the tradeoff is straightforward — FluentValidation is genuinely better for complex validation logic, but there isn't any here.
 
 ---
@@ -164,9 +157,9 @@ DataAnnotations on the DTOs cover required fields and max lengths. For an MVP th
 
 ## What I'd Do Next
 
-1. **Authentication** — JWT Bearer tokens with role-based access (user can only see their own todos)
-2. **Pagination** — cursor-based or offset pagination on `GET /api/todos`
-3. **Purge endpoint** — `DELETE /api/todos/{id}/purge` for permanent removal of soft-deleted items
-4. **Containerization** — `Dockerfile` + `docker-compose.yml` for single-command startup
-5. **Structured logging** — Serilog with request/response logging middleware
-6. **CI** — GitHub Actions workflow running `dotnet build` + `dotnet test` on every push
+1. **Authentication**: JWT Bearer tokens with role-based access (user can only see their own todos)
+2. **Pagination**: cursor-based or offset pagination on `GET /api/todos`
+3. **Purge endpoint**: `DELETE /api/todos/{id}/purge` for permanent removal of soft-deleted items
+4. **Containerization**: `Dockerfile` + `docker-compose.yml` for single-command startup
+5. **Structured logging**: Serilog with request/response logging middleware
+6. **CI**: GitHub Actions workflow running `dotnet build` + `dotnet test` on every push
