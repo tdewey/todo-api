@@ -1,9 +1,9 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using todo_api.Data;
-using todo_api.Middleware;
-using todo_api.Repositories;
-using todo_api.Services;
+using TodoApi.Data;
+using TodoApi.Middleware;
+using TodoApi.Repositories;
+using TodoApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,14 +24,14 @@ builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new() { Title = "Todo API
 SqliteConnection? seedConnection = null;
 if (builder.Environment.IsEnvironment("Seed"))
 {
-    seedConnection = new SqliteConnection(builder.Configuration.GetConnectionString("DefaultConnection"));
-    seedConnection.Open();
-    builder.Services.AddDbContext<TodoDbContext>(options => options.UseSqlite(seedConnection));
+  seedConnection = new SqliteConnection(builder.Configuration.GetConnectionString("DefaultConnection"));
+  seedConnection.Open();
+  builder.Services.AddDbContext<TodoDbContext>(options => options.UseSqlite(seedConnection));
 }
 else
 {
-    builder.Services.AddDbContext<TodoDbContext>(options =>
-        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+  builder.Services.AddDbContext<TodoDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 }
 
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
@@ -41,16 +41,16 @@ var app = builder.Build();
 
 if (app.Environment.IsEnvironment("Seed"))
 {
-    using var scope = app.Services.CreateScope();
-    var db = scope.ServiceProvider.GetRequiredService<TodoDbContext>();
-    db.Database.EnsureCreated();
-    SeedData.Apply(db);
+  using var scope = app.Services.CreateScope();
+  var db = scope.ServiceProvider.GetRequiredService<TodoDbContext>();
+  db.Database.EnsureCreated();
+  SeedData.Apply(db);
 }
 else if (!app.Environment.IsEnvironment("Testing"))
 {
-    using var scope = app.Services.CreateScope();
-    var db = scope.ServiceProvider.GetRequiredService<TodoDbContext>();
-    db.Database.Migrate();
+  using var scope = app.Services.CreateScope();
+  var db = scope.ServiceProvider.GetRequiredService<TodoDbContext>();
+  db.Database.Migrate();
 }
 
 app.UseMiddleware<GlobalExceptionMiddleware>();

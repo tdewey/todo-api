@@ -2,28 +2,28 @@
 
 #nullable disable
 
-namespace todo_api.Migrations
+namespace TodoApi.Migrations
 {
+  /// <inheritdoc />
+  public partial class RemoveDescription : Migration
+  {
     /// <inheritdoc />
-    public partial class RemoveDescription : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "Description",
-                table: "Todos");
-        }
-
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<string>(
-                name: "Description",
-                table: "Todos",
-                type: "TEXT",
-                maxLength: 1000,
-                nullable: true);
-        }
+      migrationBuilder.DropColumn(
+        name: "Description",
+        table: "Todos");
     }
+
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+      migrationBuilder.AddColumn<string>(
+        name: "Description",
+        table: "Todos",
+        type: "TEXT",
+        maxLength: 1000,
+        nullable: true);
+    }
+  }
 }

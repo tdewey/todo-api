@@ -1,0 +1,17 @@
+root = true
+
+# C# files
+[*.cs]
+
+#### Core EditorConfig Options ####
+
+# Indentation and spacing
+indent_size = 2
+indent_style = space
+tab_width = 2
+
+#### .NET Coding Conventions ####
+
+dotnet_style_namespace_match_folder = false
+
+

@@ -1,12 +1,12 @@
-using todo_api.Models;
+using TodoApi.Models;
 
-namespace todo_api.Repositories;
+namespace TodoApi.Repositories;
 
 public interface ITodoRepository
 {
-    Task<IEnumerable<TodoItem>> GetAllAsync(bool? isCompleted);
-    Task<TodoItem?> GetByIdAsync(int id);
-    Task<TodoItem> CreateAsync(TodoItem item);
-    Task<TodoItem> UpdateAsync(TodoItem item);
-    Task DeleteAsync(TodoItem item);
+  Task<IEnumerable<TodoItem>> GetAllAsync(bool? isCompleted);
+  Task<TodoItem?> GetByIdAsync(int id);
+  Task<TodoItem> CreateAsync(TodoItem item);
+  Task<TodoItem> UpdateAsync(TodoItem item);
+  Task DeleteAsync(TodoItem item);
 }
