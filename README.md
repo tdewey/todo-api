@@ -163,4 +163,4 @@ DataAnnotations on the DTOs cover required fields and max lengths. For an MVP th
 3. **Purge endpoint**: `DELETE /api/todos/{id}/purge` for permanent removal of soft-deleted items
 4. **Containerization**: `Dockerfile` + `docker-compose.yml` for single-command startup
 5. **Structured logging**: Serilog with request/response logging middleware
-6. **CI**: GitHub Actions workflow running `dotnet build` + `dotnet test` on every push
+6. **CI**: GitHub Actions workflow running `dotnet build` + `dotnet test` on every PR
