@@ -6,7 +6,6 @@ Content-Type: application/json
 
 {
   "title": "Buy groceries",
-  "description": "Milk, eggs, bread"
 }
 
 ###
@@ -51,7 +50,6 @@ Content-Type: application/json
 
 {
   "title": "Buy groceries (updated)",
-  "description": "Milk, eggs, bread, and coffee",
   "isCompleted": false
 }
 
@@ -67,7 +65,7 @@ POST {{todo_api_HostAddress}}/api/todos
 Content-Type: application/json
 
 {
-  "description": "This should fail — title is required"
+  "isCompleted": false
 }
 
 ###

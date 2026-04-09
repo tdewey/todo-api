@@ -97,7 +97,7 @@ public class TodosControllerTests : IClassFixture<TodoApiFactory>
   {
     var client = CreateClient();
 
-    var response = await client.PostAsJsonAsync("/api/todos", new { description = "No title" });
+    var response = await client.PostAsJsonAsync("/api/todos", new { IsCompleted = false });
 
     Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
   }

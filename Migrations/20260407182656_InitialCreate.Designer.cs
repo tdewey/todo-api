@@ -32,10 +32,6 @@ namespace TodoApi.Migrations
         b.Property<DateTimeOffset?>("DeletedAt")
           .HasColumnType("TEXT");
 
-        b.Property<string>("Description")
-          .HasMaxLength(1000)
-          .HasColumnType("TEXT");
-
         b.Property<bool>("IsCompleted")
           .HasColumnType("INTEGER");
 
