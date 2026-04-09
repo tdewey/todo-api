@@ -6,15 +6,15 @@ A simple CRUD REST API for managing to-do items. Built with .NET 9 and ASP.NET C
 
 ## Technology Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Runtime | .NET 9 |
-| Language | C# (nullable enabled) |
-| Framework | ASP.NET Core Web API |
-| ORM | Entity Framework Core |
-| Database | SQLite (dev) / SQL Server (prod) |
-| Tests | xUnit + EF Core InMemory provider |
-| Docs | OpenAPI (built-in) |
+| Layer     | Technology                        |
+| --------- | --------------------------------- |
+| Runtime   | .NET 9                            |
+| Language  | C# (nullable enabled)             |
+| Framework | ASP.NET Core Web API              |
+| ORM       | Entity Framework Core             |
+| Database  | SQLite (dev) / SQL Server (prod)  |
+| Tests     | xUnit + EF Core InMemory provider |
+| Docs      | OpenAPI (built-in)                |
 
 ## Project Structure
 
@@ -88,16 +88,16 @@ dotnet ef database update
 [Route("api/[controller]")]
 public class TodosController : ControllerBase
 {
-    private readonly ITodoService _service;
+  private readonly ITodoService _service;
 
-    public TodosController(ITodoService service) => _service = service;
+  public TodosController(ITodoService service) => _service = service;
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<TodoResponse>> GetById(int id)
-    {
-        var item = await _service.GetByIdAsync(id);
-        return item is null ? NotFound() : Ok(item);
-    }
+  [HttpGet("{id}")]
+  public async Task<ActionResult<TodoResponse>> GetById(int id)
+  {
+    var item = await _service.GetByIdAsync(id);
+    return item is null ? NotFound() : Ok(item);
+  }
 }
 ```
 
@@ -106,15 +106,15 @@ public class TodosController : ControllerBase
 ```csharp
 public class TodoService : ITodoService
 {
-    private readonly ITodoRepository _repository;
+  private readonly ITodoRepository _repository;
 
-    public TodoService(ITodoRepository repository) => _repository = repository;
+  public TodoService(ITodoRepository repository) => _repository = repository;
 
-    public async Task<TodoResponse?> GetByIdAsync(int id)
-    {
-        var item = await _repository.GetByIdAsync(id);
-        return item is null ? null : MapToResponse(item);
-    }
+  public async Task<TodoResponse?> GetByIdAsync(int id)
+  {
+    var item = await _repository.GetByIdAsync(id);
+    return item is null ? null : MapToResponse(item);
+  }
 }
 ```
 
@@ -123,12 +123,12 @@ public class TodoService : ITodoService
 ```csharp
 public class TodoRepository : ITodoRepository
 {
-    private readonly TodoDbContext _context;
+  private readonly TodoDbContext _context;
 
-    public TodoRepository(TodoDbContext context) => _context = context;
+  public TodoRepository(TodoDbContext context) => _context = context;
 
-    public async Task<TodoItem?> GetByIdAsync(int id) =>
-        await _context.Todos.FindAsync(id);
+  public async Task<TodoItem?> GetByIdAsync(int id) =>
+    await _context.Todos.FindAsync(id);
 }
 ```
 
@@ -137,30 +137,30 @@ public class TodoRepository : ITodoRepository
 ```csharp
 public class TodoServiceTests
 {
-    private static TodoDbContext CreateContext()
-    {
-        var options = new DbContextOptionsBuilder<TodoDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
-            .Options;
-        return new TodoDbContext(options);
-    }
+  private static TodoDbContext CreateContext()
+  {
+      var options = new DbContextOptionsBuilder<TodoDbContext>()
+          .UseInMemoryDatabase(Guid.NewGuid().ToString())
+          .Options;
+      return new TodoDbContext(options);
+  }
 
-    [Fact]
-    public async Task GetByIdAsync_ReturnsItem_WhenExists()
-    {
-        // Arrange
-        await using var context = CreateContext();
-        context.Todos.Add(new TodoItem { Id = 1, Title = "Test" });
-        await context.SaveChangesAsync();
-        var service = new TodoService(new TodoRepository(context));
+  [Fact]
+  public async Task GetByIdAsync_ReturnsItem_WhenExists()
+  {
+    // Arrange
+    await using var context = CreateContext();
+    context.Todos.Add(new TodoItem { Id = 1, Title = "Test" });
+    await context.SaveChangesAsync();
+    var service = new TodoService(new TodoRepository(context));
 
-        // Act
-        var result = await service.GetByIdAsync(1);
+    // Act
+    var result = await service.GetByIdAsync(1);
 
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal("Test", result.Title);
-    }
+    // Assert
+    Assert.NotNull(result);
+    Assert.Equal("Test", result.Title);
+  }
 }
 ```
 

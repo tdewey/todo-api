@@ -16,8 +16,10 @@ public class TodoRepository(TodoDbContext context) : ITodoRepository
     return await query.ToListAsync();
   }
 
-  public async Task<TodoItem?> GetByIdAsync(int id) =>
-      await context.Todos.FindAsync(id);
+  public async Task<TodoItem?> GetByIdAsync(int id)
+  {
+    return await context.Todos.FindAsync(id);
+  }
 
   public async Task<TodoItem> CreateAsync(TodoItem item)
   {

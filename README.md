@@ -147,6 +147,7 @@ DataAnnotations on the DTOs cover required fields and max lengths. For an MVP th
 
 | Area | Decision | Reasoning |
 |------|----------|-----------|
+| Id | Int | Instead of a UUID, this MVP implementation increments an `int` for its Primary Key identifier  |
 | Auth | None | Out of scope for this iteration; would add JWT Bearer in future iterations |
 | Pagination | None | `GET /api/todos` returns all items; acceptable for an MVP |
 | Purge | No purge endpoint | Soft-deleted rows accumulate indefinitely; a `DELETE /api/todos/{id}/purge` (admin-only) would address this |
